@@ -1,6 +1,11 @@
-const myServer = require('./myServer');
 let nPort = 8000;
-let sHost = localhost;
+let sHost = 'localhost';
+const myServer = require('./myServer');
 const myRouter = require('./myRouter');
+const myHandler = require('./myHandler');
 
-myServer.start(nPort, sHost, myRouter.route);
+let handle = {};
+handle['/']=myHandler.start;
+handle['/start']=myHandler.start;
+handle['/hello']=myHandler.hello;
+myServer.start(nPort, sHost, myRouter.route, handle);
