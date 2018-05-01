@@ -1,14 +1,11 @@
-import { route } from './myRouter';
-
 const http = require('http');
 const url = require('url');
 
-
 function start (port, hostname, route, handle) {
+    let sPostData='';
     function onRequset(req, res) {
-        let sPostData='';
         let sPathname = url.parse(req.url).pathname;
-        req.setEnconding('utf8');
+        req.setEncoding('utf8');
         req.addListener('data', function(dataChunk) {
             sPostData += dataChunk;
             console.log('Chunk = '+ dataChunk);
