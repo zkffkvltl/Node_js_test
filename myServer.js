@@ -3,13 +3,19 @@ import { route } from './myRouter';
 const http = require('http');
 const url = require('url');
 
-function start (port, hostname, route, handle){
-    function onRequset(req, res){
+
+function start (port, hostname, route, handle) {
+    function onRequset(req, res) {
+        let sPostData='';
         let sPathname = url.parse(req.url).pathname;
-        let content = route(sPathname, handle);
-        res.writeHead(200, {'content-type': 'text/html'});
-        res.write(content);
-        res.end();
+        req.setEnconding('utf8');
+        req.addListener('data', function(dataChunk) {
+            sPostData += dataChunk;
+            console.log('Chunk = '+ dataChunk);
+        });
+        req.addListener('end', function() {
+            route(sPathname, handle, res, sPostData);
+        })
     }
     http.createServer(onRequset).listen(port, hostname);
     console.log('Server is running at '+hostname+':'+port);
